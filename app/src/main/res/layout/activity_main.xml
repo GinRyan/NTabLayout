@@ -112,4 +112,33 @@
             app:nTabTitleText="Tab L" />
     </org.ginryan.oemtab.tablayout.NTabLayout>
 
+    <androidx.core.widget.NestedScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+       <LinearLayout
+           android:gravity="center"
+           android:orientation="vertical"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <Button
+               android:id="@+id/scaleAnime"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Scale Anime" />
+
+           <TextView
+               android:id="@+id/logtext"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               />
+       </LinearLayout>
+        </FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>

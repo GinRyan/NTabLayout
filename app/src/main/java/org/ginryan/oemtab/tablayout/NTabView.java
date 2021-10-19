@@ -1,5 +1,7 @@
 package org.ginryan.oemtab.tablayout;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -38,22 +41,25 @@ public class NTabView extends FrameLayout implements State, TabChild {
     float mTabTitleScaleRateBuf = 1;
     //Tab的状态是Check与否
     int mCheckState = State.STATE_CODE_UNCHECK;
+    int mLastCheckState = State.STATE_CODE_UNCHECK;
 
     void resetTabTitleState() {
         mTabTitleScaleRateBuf = 1;
-        useBoldFont = false;
+        inBoldFontState = false;
     }
 
-    boolean useBoldFont = false;
+    boolean inBoldFontState = false;
 
     Paint mTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint mLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    boolean showGuideline = true;
+
     boolean showTitle = true;
     //自己在父Tab中的位置索引
     int mItemIndexInTab = -1;
 
+    //显示调试辅助线
+    boolean showGuideline = false;
 
     public NTabView(@NonNull Context context) {
         super(context);
@@ -96,6 +102,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
         setClipChildren(false);
         setClipToPadding(false);
 
+        mLastCheckState = mCheckState;
         mCheckState = nTabTitleChecked ? State.STATE_CODE_CHECKED : State.STATE_CODE_UNCHECK;
 
         updateState(false);
@@ -112,7 +119,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
         mTitlePaint.setColor(nTabTitleColor);
         mTitlePaint.setDither(true);
         mTitlePaint.setStyle(Paint.Style.FILL);
-        mTitlePaint.setFakeBoldText(useBoldFont);
+        mTitlePaint.setFakeBoldText(inBoldFontState);
 
         mLinePaint.setColor(Color.argb(255, 220, 0, 20));
         mLinePaint.setStyle(Paint.Style.FILL);
@@ -189,7 +196,6 @@ public class NTabView extends FrameLayout implements State, TabChild {
         }
 
         updateState(false);
-
     }
 
     @Override
@@ -197,13 +203,17 @@ public class NTabView extends FrameLayout implements State, TabChild {
         updateBy(byCheck);
     }
 
+    /**
+     * Update 函数，用于更新所有绘制内容的状态
+     *
+     * @param byCheck
+     */
     public void updateBy(boolean byCheck) {
         if (byCheck) {
             checkItemIndexInTab();
         }
         if (mItemIndexInTab < 0) {
-            //此时还不知道mItemIndexInTab
-            // Log.i(TAG, "mItemIndexInTab: not assigned valid index.");
+            //buggy 此时还不知道mItemIndexInTab
         } else {
             if (mCheckState == STATE_CODE_CHECKED) {
                 Log.i(TAG, "INDEX: " + mItemIndexInTab + "--> ✔");
@@ -213,7 +223,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
         }
         if (mCheckState == STATE_CODE_CHECKED) {
             mTabTitleScaleRateBuf = tabTitleScaleRateOnChecked;
-            useBoldFont = true;
+            //FIXME inBoldFontState = true;
 
             if (byCheck) {
 
@@ -223,8 +233,8 @@ public class NTabView extends FrameLayout implements State, TabChild {
                 Rect vRect = new Rect();
                 getGlobalVisibleRect(vRect);
                 int visibleWidth = vRect.width();
-                int thizViewMeasuredWidth = getMeasuredWidth();
-                int invisibleWidth = thizViewMeasuredWidth - visibleWidth;
+                int measuredWidth = getMeasuredWidth();
+                int invisibleWidth = measuredWidth - visibleWidth;
 
                 //父控件宽度
 
@@ -248,15 +258,21 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
                     sign = middleDelta / Math.abs(middleDelta);
                 }
-                Log.i(TAG, "Sign: " + sign);
+                //Log.i(TAG, "Sign: " + sign);
                 //滑动位移translate不如一步到位
-                int slideTx = invisibleWidth + parentVisibleWidth / 2 - thizViewMeasuredWidth / 2;
+                int slideTx = invisibleWidth + parentVisibleWidth / 2 - measuredWidth / 2;
 
                 smoothScrollToMidBy(slideTx * sign);
-            }
 
+            }
+            if (byCheck) {
+                animateScale(true);
+            }
         } else if (mCheckState == STATE_CODE_UNCHECK) {
             resetTabTitleState();
+            if (byCheck) {
+                animateScale(false);
+            }
         } else {
             resetTabTitleState();
         }
@@ -264,6 +280,15 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
         invalidate();
         requestLayout();
+    }
+
+    /**
+     * 动画扩展标题文字大小
+     *
+     * @param animateIn true为从未选中到选中过渡，false为反方向
+     */
+    public void animateScale(boolean animateIn) {
+
     }
 
     public void smoothScrollToMidBy(int dx) {
@@ -279,6 +304,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
     @Override
     public void checkState(int stateCode) {
+        mLastCheckState = mCheckState;
         mCheckState = stateCode;
         updateState(true);
     }
@@ -295,6 +321,25 @@ public class NTabView extends FrameLayout implements State, TabChild {
         }
     }
 
+    public NTabView setNTabTitleSize(float nTabTitleSize) {
+        this.nTabTitleSize = nTabTitleSize;
+        invalidate();
+        requestLayout();
+        return this;
+    }
+
+    public float getNTabTitleSize() {
+        return nTabTitleSize;
+    }
+
+    public NTabView setTabTitleScaleRateOnChecked(float tabTitleScaleRateOnChecked) {
+        this.tabTitleScaleRateOnChecked = tabTitleScaleRateOnChecked;
+        return this;
+    }
+
+    public float getTabTitleScaleRateOnChecked() {
+        return tabTitleScaleRateOnChecked;
+    }
 
     @Override
     public TabLayoutParent getTabLayoutParent() {

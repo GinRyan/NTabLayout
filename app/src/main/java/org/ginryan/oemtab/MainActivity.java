@@ -3,10 +3,12 @@ package org.ginryan.oemtab;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -21,9 +23,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        activityMainBinding = ActivityMainBinding.bind(getLayoutInflater().inflate(R.layout.activity_main, null));
+        setContentView(activityMainBinding.getRoot());
 
-        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        activityMainBinding.scaleAnime.setOnClickListener(v -> {
+        });
     }
+
 
 }
