@@ -89,10 +89,6 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
         op.recycle();
 
-//        Log.d(TAG, "nTabTitleState: " + nTabTitleState);
-//        Log.d(TAG, "nTabTitleSize: " + nTabTitleSize);
-//        Log.d(TAG, "nTabTitleColor: " + nTabTitleColor);
-//        Log.d(TAG, "nTabTitleChecked: " + nTabTitleChecked);
     }
 
     void init() {
@@ -230,20 +226,12 @@ public class NTabView extends FrameLayout implements State, TabChild {
                 int thizViewMeasuredWidth = getMeasuredWidth();
                 int invisibleWidth = thizViewMeasuredWidth - visibleWidth;
 
-//                Log.i(TAG, "Index: " + mItemIndexInTab + "  -- visibleWidth: " + visibleWidth + " -- thizViewMeasuredWidth: " + thizViewMeasuredWidth + " -- invisibleWidth: " + invisibleWidth);
                 //父控件宽度
 
                 Rect parentVisibleRect = new Rect();
                 parent.getGlobalVisibleRect(parentVisibleRect);
                 int parentVisibleWidth = parentVisibleRect.width();
 
-                int parentMeasuredWidth = parent.getMeasuredWidth();
-
-//                Log.i(TAG, "Index: " + mItemIndexInTab + "  -- Left: "
-//                        + getLeft() + "  -- Right: " + getRight()
-//                        + "  -- parentVisibleWidth: " + parentVisibleWidth + " -- parent Width: " + parentMeasuredWidth);
-
-                Log.i(TAG, "MIDScroll left :[" + getLeft() + "] -- this view scrolled: x:[" + parent.getScrollX() + "] --  middle: [" + getWidth() / 2 + "]");
                 int sign = 0;
                 if (invisibleWidth > 0) {
                     /*  left                    right
