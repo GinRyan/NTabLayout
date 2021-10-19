@@ -295,17 +295,6 @@ public class NTabView extends FrameLayout implements State, TabChild {
         }
     }
 
-    public int dip2px(int value) {
-        return (int) Utils.dipToPx(this, value);
-    }
-
-    public int sp2px(int value) {
-        return (int) Utils.spToPx(this, value);
-    }
-
-    public int pt2px(int value) {
-        return (int) Utils.ptToPx(this, value);
-    }
 
     @Override
     public TabLayoutParent getTabLayoutParent() {
