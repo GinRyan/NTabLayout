@@ -3,6 +3,7 @@ package org.ginryan.oemtab.tablayout;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * 横向滚动的布局
@@ -31,6 +33,21 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     //当前缓存的NTabView
     ArrayList<NTabView> mNTabViews = new ArrayList<>();
 
+    public interface OnTabListener {
+        void onTabItemSelected(int itemIndex);
+    }
+
+    LinkedList<OnTabListener> onTabListener = new LinkedList<>();
+
+    public NTabLayout addOnTabListener(OnTabListener onTabListener) {
+        this.onTabListener.add(onTabListener);
+        return this;
+    }
+
+    public NTabLayout removeHeadOnTabListener() {
+        this.onTabListener.remove();
+        return this;
+    }
 
     public NTabLayout(Context context) {
         super(context);
@@ -222,7 +239,12 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
         Log.i(TAG, "MItem Index: " + item);
         mSelectedTabNum = item;
         updateState(true);
+
+        for (int i = 0; i < onTabListener.size(); i++) {
+            onTabListener.get(i).onTabItemSelected(mSelectedTabNum);
+        }
     }
+
 
     /**
      * 将在ScrollableIndicatorLayout中显示Tab内容以及背景指示器

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.bind(getLayoutInflater().inflate(R.layout.activity_main, null));
         setContentView(activityMainBinding.getRoot());
 
+        activityMainBinding.tablayout.addOnTabListener(itemIndex -> {
+            activityMainBinding.logtext.setText("Selected Tab: " + itemIndex);
+        });
     }
 
 

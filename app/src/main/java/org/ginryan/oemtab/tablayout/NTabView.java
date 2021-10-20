@@ -338,7 +338,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
     Handler handler = new Handler(msg -> {
         switch (msg.what) {
-            case 1000:
+            case HANDLER_VIEW_MSG_ANIM:
                 postDelayed(() -> {
                     currentFontScaleRate += rateDelta;
                     mCurrentFpc++;
@@ -356,9 +356,9 @@ public class NTabView extends FrameLayout implements State, TabChild {
         }
         return true;
     });
-
+    public static final int HANDLER_VIEW_MSG_ANIM = 999100;
     private void nextTickAnim() {
-        handler.sendEmptyMessage(1000);
+        handler.sendEmptyMessage(HANDLER_VIEW_MSG_ANIM);
     }
 
     private void animateScaleIn() {
@@ -428,14 +428,6 @@ public class NTabView extends FrameLayout implements State, TabChild {
         return nTabTitleSize;
     }
 
-//    public NTabView setTabTitleScaleRateOnChecked(float tabTitleScaleRateOnChecked) {
-//        this.tabTitleScaleRateOnChecked = tabTitleScaleRateOnChecked;
-//        return this;
-//    }
-
-    public float getTAB_TEXT_SCALED_UP_ON_CHECKED() {
-        return TAB_TEXT_SCALED_UP_ON_CHECKED;
-    }
 
     @Override
     public TabLayoutParent getTabLayoutParent() {
