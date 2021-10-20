@@ -91,13 +91,13 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
         nTabTitleColor = op.getColor(R.styleable.NTabView_nTabTitleColor,
                 Color.parseColor("#000000"));
-
+        //useAnimScale = op.getBoolean(R.styleable.NTabView_nTabUseAnimationFontScale, true);
         op.recycle();
-
     }
 
 
     void init() {
+
         setWillNotDraw(false);
         setClipChildren(false);
         setClipToPadding(false);
@@ -260,28 +260,20 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
                     sign = middleDelta / Math.abs(middleDelta);
                 }
-                //Log.i(TAG, "Sign: " + sign);
-                //滑动位移translate不如一步到位
                 int slideTx = invisibleWidth + parentVisibleWidth / 2 - measuredWidth / 2;
-
                 smoothScrollToMidBy(slideTx * sign);
-
             }
-            if (!useAnimScale) {
-                setCurrentFontScaleRate(TAB_TEXT_SCALED_UP_ON_CHECKED);
-            }
+            setCurrentFontScaleRate(TAB_TEXT_SCALED_UP_ON_CHECKED);
             if (mLastCheckState == STATE_CODE_UNCHECK) {
-                if (byCheck) {
+                if (byCheck && useAnimScale) {
                     animateScaleIn();
                 }
             }
         } else if (mCheckState == STATE_CODE_UNCHECK) {
-            if (!useAnimScale) {
-                setCurrentFontScaleRate(1);
-            }
+            setCurrentFontScaleRate(1);
             if (mLastCheckState == STATE_CODE_CHECKED) {
                 resetTabTitleState();
-                if (byCheck) {
+                if (byCheck && useAnimScale) {
                     animateScaleOut();
                 }
             }
@@ -291,7 +283,8 @@ public class NTabView extends FrameLayout implements State, TabChild {
         updatePaints();
     }
 
-    boolean useAnimScale = false;
+    //使用动画
+    boolean useAnimScale = true;
     //单帧时长
     private static final float DURING_PER_FRAME = 16.67f;
     //补间动画时长(ms)
@@ -357,6 +350,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
         return true;
     });
     public static final int HANDLER_VIEW_MSG_ANIM = 999100;
+
     private void nextTickAnim() {
         handler.sendEmptyMessage(HANDLER_VIEW_MSG_ANIM);
     }
@@ -385,6 +379,10 @@ public class NTabView extends FrameLayout implements State, TabChild {
         return currentFontScaleRate;
     }
 
+    public NTabView setUseAnimScale(boolean useAnimScale) {
+        this.useAnimScale = useAnimScale;
+        return this;
+    }
 
     public void smoothScrollToMidBy(int dx) {
         NTabLayout parent = (NTabLayout) getParent().getParent();

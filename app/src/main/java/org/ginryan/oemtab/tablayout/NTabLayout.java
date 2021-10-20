@@ -1,6 +1,7 @@
 package org.ginryan.oemtab.tablayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -15,6 +16,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.ginryan.oemtab.R;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -27,7 +30,6 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     IndicatorView mIndicatorView;
     //最低高度
     int mMinHeightDp = 32;
-
     //当前被选择的Item
     int mSelectedTabNum = 0;
     //当前缓存的NTabView
@@ -38,6 +40,8 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     LinkedList<OnTabListener> onTabListener = new LinkedList<>();
+
+    boolean nTabUseAnimationFontScale;
 
     public NTabLayout addOnTabListener(OnTabListener onTabListener) {
         this.onTabListener.add(onTabListener);
@@ -56,12 +60,19 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
 
     public NTabLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initAttr(attrs);
         init();
     }
 
     public NTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initAttr(attrs);
         init();
+    }
+
+    void initAttr(AttributeSet attrs) {
+        TypedArray op = getContext().obtainStyledAttributes(attrs, R.styleable.NTabLayout);
+        nTabUseAnimationFontScale = op.getBoolean(R.styleable.NTabLayout_nTabUseAnimationFontScale, true);
     }
 
     void init() {
@@ -166,6 +177,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
      * @param nTabView
      */
     final void addTabViewToArray(NTabView nTabView) {
+        nTabView.setUseAnimScale(nTabUseAnimationFontScale);
         mNTabViews.add(nTabView);
     }
 
@@ -176,6 +188,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
      * @param index
      */
     final void addTabViewToArray(NTabView nTabView, int index) {
+        nTabView.setUseAnimScale(nTabUseAnimationFontScale);
         mNTabViews.add(index, nTabView);
     }
 

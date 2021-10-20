@@ -10,7 +10,8 @@
     <org.ginryan.oemtab.tablayout.NTabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:nTabUseAnimationFontScale="true">
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewA"
@@ -113,31 +114,32 @@
     </org.ginryan.oemtab.tablayout.NTabLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:fillViewport="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
         <FrameLayout
-            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-       <LinearLayout
-           android:gravity="center"
-           android:orientation="vertical"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-<!--           <Button-->
-<!--               android:id="@+id/scaleAnime"-->
-<!--               android:layout_width="match_parent"-->
-<!--               android:layout_height="wrap_content"-->
-<!--               android:text="Scale Anime" />-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
-           <TextView
-               android:id="@+id/logtext"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               />
-       </LinearLayout>
+                <!--           <Button-->
+                <!--               android:id="@+id/scaleAnime"-->
+                <!--               android:layout_width="match_parent"-->
+                <!--               android:layout_height="wrap_content"-->
+                <!--               android:text="Scale Anime" />-->
+
+                <TextView
+                    android:id="@+id/logtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </FrameLayout>
     </androidx.core.widget.NestedScrollView>
 
