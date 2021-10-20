@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.bind(getLayoutInflater().inflate(R.layout.activity_main, null));
         setContentView(activityMainBinding.getRoot());
 
-        activityMainBinding.scaleAnime.setOnClickListener(v -> {
-        });
     }
 
 

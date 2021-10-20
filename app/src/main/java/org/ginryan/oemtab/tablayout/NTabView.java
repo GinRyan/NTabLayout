@@ -1,6 +1,5 @@
 package org.ginryan.oemtab.tablayout;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,12 +8,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -34,17 +33,17 @@ public class NTabView extends FrameLayout implements State, TabChild {
     boolean nTabTitleChecked;
 
     View customView;
+    //计算字体大小
+    float mComputeFontSize;
 
     //Tab被选中时的放大率
-    public float tabTitleScaleRateOnChecked = 1.34f;
-    boolean useTitleScaleRate = true;
-    float mTabTitleScaleRateBuf = 1;
+    public final float TAB_TEXT_SCALED_UP_ON_CHECKED = 1.34f;
+    //boolean useTitleScaleRate = true;
     //Tab的状态是Check与否
     int mCheckState = State.STATE_CODE_UNCHECK;
     int mLastCheckState = State.STATE_CODE_UNCHECK;
 
     void resetTabTitleState() {
-        mTabTitleScaleRateBuf = 1;
         inBoldFontState = false;
     }
 
@@ -97,6 +96,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
     }
 
+
     void init() {
         setWillNotDraw(false);
         setClipChildren(false);
@@ -104,6 +104,8 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
         mLastCheckState = mCheckState;
         mCheckState = nTabTitleChecked ? State.STATE_CODE_CHECKED : State.STATE_CODE_UNCHECK;
+
+        mComputeFontSize = nTabTitleSize;
 
         updateState(false);
 
@@ -115,7 +117,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
     }
 
     void updatePaints() {
-        mTitlePaint.setTextSize(nTabTitleSize * (useTitleScaleRate ? mTabTitleScaleRateBuf : 1));
+        mTitlePaint.setTextSize(mComputeFontSize * currentFontScaleRate);
         mTitlePaint.setColor(nTabTitleColor);
         mTitlePaint.setDither(true);
         mTitlePaint.setStyle(Paint.Style.FILL);
@@ -123,7 +125,8 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
         mLinePaint.setColor(Color.argb(255, 220, 0, 20));
         mLinePaint.setStyle(Paint.Style.FILL);
-
+        invalidate();
+        requestLayout();
     }
 
     public NTabView setCustomView(View customView) {
@@ -163,7 +166,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
         float halfTextWidth = textWidth / 2;
         //左边推进的宽度
         float leftOffset = getMeasuredWidth() / 2 - halfTextWidth;
-        float textBaseline = (getMeasuredHeight() / 2 + nTabTitleSize / 2);
+        float textBaseline = (getMeasuredHeight() / 2 + mComputeFontSize / 2);
 
         if (showTitle) {
             canvas.save();
@@ -171,7 +174,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
             canvas.restore();
         }
 
-        float textUpperLine = (getMeasuredHeight() / 2 - nTabTitleSize / 2);
+        float textUpperLine = (getMeasuredHeight() / 2 - mComputeFontSize / 2);
         float leftLine = leftOffset;
         float rightLine = leftOffset + textWidth;
 
@@ -222,7 +225,6 @@ public class NTabView extends FrameLayout implements State, TabChild {
             }
         }
         if (mCheckState == STATE_CODE_CHECKED) {
-            mTabTitleScaleRateBuf = tabTitleScaleRateOnChecked;
             //FIXME inBoldFontState = true;
 
             if (byCheck) {
@@ -265,31 +267,124 @@ public class NTabView extends FrameLayout implements State, TabChild {
                 smoothScrollToMidBy(slideTx * sign);
 
             }
-            if (byCheck) {
-                animateScale(true);
+            if (!useAnimScale) {
+                setCurrentFontScaleRate(TAB_TEXT_SCALED_UP_ON_CHECKED);
+            }
+            if (mLastCheckState == STATE_CODE_UNCHECK) {
+                if (byCheck) {
+                    animateScaleIn();
+                }
             }
         } else if (mCheckState == STATE_CODE_UNCHECK) {
-            resetTabTitleState();
-            if (byCheck) {
-                animateScale(false);
+            if (!useAnimScale) {
+                setCurrentFontScaleRate(1);
+            }
+            if (mLastCheckState == STATE_CODE_CHECKED) {
+                resetTabTitleState();
+                if (byCheck) {
+                    animateScaleOut();
+                }
             }
         } else {
             resetTabTitleState();
         }
         updatePaints();
+    }
 
+    boolean useAnimScale = false;
+    //单帧时长
+    private static final float DURING_PER_FRAME = 16.67f;
+    //补间动画时长(ms)
+    final float animationDuring = 100;
+
+    //目标缩放率(%)
+    float mFontScaleRateLowestLimit = 1;
+    //起始缩放率(%)
+    float mFontScaleRateUpperLimit = 1;
+    //当前缩放率(%)
+    float currentFontScaleRate = 1;
+    //缩放率步长
+    float rateDelta = 0;
+
+    //补间动画总帧数(fpc)
+    int mTotalTweenFpc = 0;
+    //当前帧编号
+    int mCurrentFpc = 0;
+
+    int sign = 1;
+
+    private void scaleInStateInit() {
+        mFontScaleRateUpperLimit = 1;
+        mFontScaleRateLowestLimit = TAB_TEXT_SCALED_UP_ON_CHECKED;
+
+        currentFontScaleRate = mFontScaleRateUpperLimit;
+        sign = 1;
+        computeArgs();
+    }
+
+    private void scaleOutStateInit() {
+        mFontScaleRateUpperLimit = TAB_TEXT_SCALED_UP_ON_CHECKED;
+        mFontScaleRateLowestLimit = 1;
+
+        currentFontScaleRate = mFontScaleRateUpperLimit;
+        sign = -1;
+        computeArgs();
+    }
+
+    private void computeArgs() {
+        mTotalTweenFpc = (int) (animationDuring / DURING_PER_FRAME);
+        rateDelta = sign * Math.abs(mFontScaleRateUpperLimit - mFontScaleRateLowestLimit) / mTotalTweenFpc;
+    }
+
+    Handler handler = new Handler(msg -> {
+        switch (msg.what) {
+            case 1000:
+                postDelayed(() -> {
+                    currentFontScaleRate += rateDelta;
+                    mCurrentFpc++;
+                    if (mCurrentFpc < mTotalTweenFpc) {
+                        nextTickAnim();
+                    } else {
+                        //Vital!!! or scale will not work.
+                        mCurrentFpc = 0;
+                    }
+                    updatePaints();
+                    invalidate();
+                }, (long) DURING_PER_FRAME);
+
+                break;
+        }
+        return true;
+    });
+
+    private void nextTickAnim() {
+        handler.sendEmptyMessage(1000);
+    }
+
+    private void animateScaleIn() {
+        Log.i(TAG, "animateScaleIn : " + mItemIndexInTab);
+        scaleInStateInit();
+
+        nextTickAnim();
+    }
+
+    private void animateScaleOut() {
+        Log.i(TAG, "animateScaleOut: " + mItemIndexInTab);
+        scaleOutStateInit();
+
+        nextTickAnim();
+    }
+
+
+    public void setCurrentFontScaleRate(float currentFontScaleRate) {
+        this.currentFontScaleRate = currentFontScaleRate;
         invalidate();
-        requestLayout();
     }
 
-    /**
-     * 动画扩展标题文字大小
-     *
-     * @param animateIn true为从未选中到选中过渡，false为反方向
-     */
-    public void animateScale(boolean animateIn) {
-
+    public float getCurrentFontScaleRate() {
+        return currentFontScaleRate;
     }
+
 
     public void smoothScrollToMidBy(int dx) {
         NTabLayout parent = (NTabLayout) getParent().getParent();
@@ -323,6 +418,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
     public NTabView setNTabTitleSize(float nTabTitleSize) {
         this.nTabTitleSize = nTabTitleSize;
+        this.mComputeFontSize = nTabTitleSize;
         invalidate();
         requestLayout();
         return this;
@@ -332,13 +428,13 @@ public class NTabView extends FrameLayout implements State, TabChild {
         return nTabTitleSize;
     }
 
-    public NTabView setTabTitleScaleRateOnChecked(float tabTitleScaleRateOnChecked) {
-        this.tabTitleScaleRateOnChecked = tabTitleScaleRateOnChecked;
-        return this;
-    }
+//    public NTabView setTabTitleScaleRateOnChecked(float tabTitleScaleRateOnChecked) {
+//        this.tabTitleScaleRateOnChecked = tabTitleScaleRateOnChecked;
+//        return this;
+//    }
 
-    public float getTabTitleScaleRateOnChecked() {
-        return tabTitleScaleRateOnChecked;
+    public float getTAB_TEXT_SCALED_UP_ON_CHECKED() {
+        return TAB_TEXT_SCALED_UP_ON_CHECKED;
     }
 
     @Override
