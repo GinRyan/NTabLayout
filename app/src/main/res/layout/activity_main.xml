@@ -15,100 +15,87 @@
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewA"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="@color/purple_200"
             app:nTabTitleChecked="true"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab A" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewB"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#F44336"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab B" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewC"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#8BC34A"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab C" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewD"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#E91E63"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab D" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewE"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#3F51B5"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab E" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewF"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#CDDC39"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab F" />
 
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewG"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="@color/purple_200"
-            app:nTabTitleChecked="true"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab G" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewH"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#F44336"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab H" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewI"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#8BC34A"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab I" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewJ"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#E91E63"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab J" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewK"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#3F51B5"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab K" />
 
         <org.ginryan.oemtab.tablayout.NTabView
             android:id="@+id/tabviewL"
-            android:layout_width="120dp"
+            android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#CDDC39"
             app:nTabTitleSize="26sp"
             app:nTabTitleText="Tab L" />
     </org.ginryan.oemtab.tablayout.NTabLayout>
