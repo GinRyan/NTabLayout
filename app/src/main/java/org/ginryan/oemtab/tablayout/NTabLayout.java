@@ -27,7 +27,6 @@ import java.util.LinkedList;
 public class NTabLayout extends HorizontalScrollView implements State, TabLayoutParent {
     private static final String TAG = "NTabLayout";
     ScrollableLayout mScrollableLayout;
-    IndicatorView mIndicatorView;
     //最低高度
     int mMinHeightDp = 32;
     //当前被选择的Item
@@ -76,7 +75,6 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     void init() {
-        mIndicatorView = new IndicatorView(getContext());
         //设置最低高度
         setMinimumHeight((int) Utils.dipToPx(this, mMinHeightDp));
         mScrollableLayout = new ScrollableLayout(getContext());
@@ -236,7 +234,6 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
         for (int i = 0; i < mNTabViews.size(); i++) {
             mNTabViews.get(i).checkState(i == mSelectedTabNum ? STATE_CODE_CHECKED : STATE_CODE_UNCHECK);
         }
-        mIndicatorView.updateState(byCheck);
         mScrollableLayout.updateState(byCheck);
         invalidate();
         requestLayout();
@@ -296,39 +293,4 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
 
     }
 
-    /**
-     * 指示条动画View
-     */
-    class IndicatorView extends FrameLayout implements State {
-        Drawable mBackground;
-
-        public IndicatorView(@NonNull Context context) {
-            super(context);
-        }
-
-        public IndicatorView(@NonNull Context context, @Nullable AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public IndicatorView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-            setWillNotDraw(false);
-        }
-
-        public IndicatorView setIndicatorBackground(Drawable background) {
-            this.mBackground = background;
-            return this;
-        }
-
-        @Override
-        public void updateState(boolean byCheck) {
-            //invalidate();
-        }
-
-        @Override
-        public void checkState(int stateCode) {
-
-        }
-
-    }
 }
