@@ -220,7 +220,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
             }
         }
         if (mCheckState == STATE_CODE_CHECKED) {
-            //FIXME inBoldFontState = true;
+             inBoldFontState = true;
 
             if (byCheck) {
 

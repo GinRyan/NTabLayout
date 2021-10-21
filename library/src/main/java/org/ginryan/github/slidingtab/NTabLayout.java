@@ -31,6 +31,10 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
         void onTabItemSelected(int itemIndex);
     }
 
+    public int getNTabViewsCount() {
+        return mNTabViews.size();
+    }
+
     LinkedList<OnTabListener> onTabListener = new LinkedList<>();
 
     boolean nTabUseAnimationFontScale;
@@ -207,7 +211,9 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
      * @param index
      */
     public final void setSelectedTab(int index) {
-        notifyUpdateParent(index);
+        if (index != mSelectedTabNum) {
+            notifyUpdateParent(index);
+        }
     }
 
     /**
@@ -251,7 +257,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     /**
      * 将在ScrollableIndicatorLayout中显示Tab内容以及背景指示器
      */
-    class ScrollableLayout extends LinearLayout implements State {
+    static class ScrollableLayout extends LinearLayout implements State {
         int mSelectedTabNum = 0;
 
         public ScrollableLayout(Context context) {
