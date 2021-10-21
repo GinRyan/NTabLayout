@@ -207,8 +207,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
      * @param index
      */
     public final void setSelectedTab(int index) {
-        this.mSelectedTabNum = index;
-        updateState(false);
+        notifyUpdateParent(index);
     }
 
     /**
