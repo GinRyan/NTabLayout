@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
-import androidx.annotation.Nullable;
-
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -261,11 +259,11 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
             super(context);
         }
 
-        public ScrollableLayout(Context context, @Nullable AttributeSet attrs) {
+        public ScrollableLayout(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
-        public ScrollableLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        public ScrollableLayout(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
             setWillNotDraw(false);
         }

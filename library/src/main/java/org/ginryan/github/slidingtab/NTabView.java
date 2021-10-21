@@ -15,9 +15,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 
 public class NTabView extends FrameLayout implements State, TabChild {
     public static final String TAG = "NTabView";
@@ -58,20 +55,20 @@ public class NTabView extends FrameLayout implements State, TabChild {
     //显示调试辅助线
     boolean showGuideline = false;
 
-    public NTabView(@NonNull Context context) {
+    public NTabView(Context context) {
         super(context);
 
         init();
     }
 
-    public NTabView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public NTabView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         initAttrs(attrs);
         init();
     }
 
-    public NTabView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public NTabView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         initAttrs(attrs);
@@ -79,7 +76,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
     }
 
 
-    void initAttrs(@Nullable AttributeSet attrs) {
+    void initAttrs( AttributeSet attrs) {
         TypedArray op = getContext().obtainStyledAttributes(attrs, R.styleable.NTabView);
 
         nTabTitleState = (String) op.getText(R.styleable.NTabView_nTabTitleText);
