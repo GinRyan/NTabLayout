@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NTabLayout">
+        <attr name="nTabUseAnimationFontScale" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="NTabView">
+        <attr name="nTabTitleText" format="string" />
+        <attr name="nTabTitleColor" format="reference" />
+        <attr name="nTabTitleSize" format="dimension" />
+        <attr name="nDrawableIcon" format="reference" />
+        <attr name="nTabTitleChecked" format="boolean" />
+<!--        <attr name="nTabUseAnimationFontScale" format="boolean" />-->
+
+    </declare-styleable>
+</resources>

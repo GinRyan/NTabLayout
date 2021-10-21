@@ -1,4 +1,4 @@
-package org.ginryan.oemtab.tablayout;
+package org.ginryan.github.slidingtab;
 
 public interface TabChild {
     TabLayoutParent getTabLayoutParent();

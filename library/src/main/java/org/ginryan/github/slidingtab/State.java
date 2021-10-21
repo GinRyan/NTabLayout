@@ -1,4 +1,4 @@
-package org.ginryan.oemtab.tablayout;
+package org.ginryan.github.slidingtab;
 
 /**
  * 状态接口，可更新状态

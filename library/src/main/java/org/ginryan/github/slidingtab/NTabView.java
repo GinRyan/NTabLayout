@@ -1,6 +1,5 @@
-package org.ginryan.oemtab.tablayout;
+package org.ginryan.github.slidingtab;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -19,7 +18,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.ginryan.oemtab.R;
 
 public class NTabView extends FrameLayout implements State, TabChild {
     public static final String TAG = "NTabView";

@@ -1,22 +1,17 @@
-package org.ginryan.oemtab.tablayout;
+package org.ginryan.github.slidingtab;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.ginryan.oemtab.R;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
