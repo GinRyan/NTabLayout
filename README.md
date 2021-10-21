@@ -34,7 +34,7 @@ layout.xml
    </org.ginryan.github.slidingtab.NTabLayout>
 ```
 
-NTabLayout will include one or more NTabView to show tabs.
+NTabLayout have to include one or more NTabView to show tabs.
 
 
 
