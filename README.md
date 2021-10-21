@@ -10,7 +10,7 @@ This tab bar's effect seems like Xue Qiu's tab bar,  which can load tags on top 
 
 ## SnapShot
 
-<video src="snapshot/snapshot1.mp4" width="540" height="960" />
+<img src="snapshot/snapshot1.gif" width="540" height="960" />
 
 ## Usage
 
