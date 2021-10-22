@@ -84,7 +84,7 @@ NTabLayout tablayout = findViewById(...);
 viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				//You can't not pull here.
+				//Causion!You can't not pull here.
             }
 
             @Override
@@ -102,7 +102,9 @@ tablayout.addOnTabListener(itemIndex -> {
 
 ```
 
+## Third Party Library
 
+No 3rd party dependencies. 
 
 
 ## License
