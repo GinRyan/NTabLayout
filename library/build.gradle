@@ -37,7 +37,7 @@ afterEvaluate {
 
                 group = 'com.github.GinRyan'
                 artifactId = 'NTabLayout'
-                version = '0.3.2'
+                version = '0.3.3'
 
                 // Adds javadocs and sources as separate jars.
                 artifact androidJavadocsJar
