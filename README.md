@@ -14,6 +14,22 @@ This tab bar's effect seems like Xue Qiu's tab bar,  which can load tags on top 
 
 ## Usage
 
+Add into project:
+
+```groovy
+repositories {
+    maven { url "https://jitpack.io" }
+}
+```
+
+and add line:
+
+```groovy
+implementation 'com.github.GinRyan:NTabLayout:0.3.4'
+```
+
+
+
 layout.xml
 
 ```xml
