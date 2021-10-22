@@ -1,5 +1,7 @@
 # NTabLayout
 
+[![](https://jitpack.io/v/GinRyan/NTabLayout.svg)](https://jitpack.io/#GinRyan/NTabLayout)
+
 ## Brief
 
 NTabLayout is a simple tab bar custom view under android which has click-sliding and scaling up animation effect.
