@@ -52,8 +52,6 @@ NTabLayout have to include one or more NTabView to show tabs.
 
 ### Code
 
-###  
-
 | Class      | method                    | introduction                                                 |
 | ---------- | ------------------------- | ------------------------------------------------------------ |
 | NTabLayout | setSelectedTab(int index) | select tab.                                                  |
@@ -75,6 +73,33 @@ NTabLayout tablayout = findViewById(...);
 tablayout.addOnTabListener(itemIndex -> {
     Log.d("Tab","Selected Tab: " + itemIndex);
 });
+```
+
+Interact with ViewPager: 
+
+```java
+ViewPager viewPager = findViewById(...);
+NTabLayout tablayout = findViewById(...);
+
+viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				//You can't not pull here.
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tablayout.setSelectedTab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+tablayout.addOnTabListener(itemIndex -> {
+            viewPager.setCurrentItem(itemIndex);
+});
+
 ```
 
 
