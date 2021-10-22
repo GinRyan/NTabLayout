@@ -15,16 +15,18 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * 横向滚动的布局
+ * Sliding tab layout.
+ *
+ * @author GinRyan Xelloss
  */
 public class NTabLayout extends HorizontalScrollView implements State, TabLayoutParent {
     private static final String TAG = "NTabLayout";
     ScrollableLayout mScrollableLayout;
-    //最低高度
+    //minimum height
     int mMinHeightDp = 32;
-    //当前被选择的Item
+    //current selected tab num.
     int mSelectedTabNum = 0;
-    //当前缓存的NTabView
+    //cached NTabViews
     ArrayList<NTabView> mNTabViews = new ArrayList<>();
 
     public interface OnTabListener {
@@ -72,13 +74,13 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     void init() {
-        //设置最低高度
+        //setMinimumHeight
         setMinimumHeight((int) Utils.dipToPx(this, mMinHeightDp));
         mScrollableLayout = new ScrollableLayout(getContext());
         super.addView(
                 mScrollableLayout,
                 0,
-                //必须以MATCH_PARENT填充宽高，与TabLayout形成完全相同的大小
+                //have to filled by MATCH_PARENT
                 new HorizontalScrollView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
@@ -89,10 +91,9 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
         setClipChildren(false);
         setClipToPadding(false);
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            //要困在当前的轮廓中
-            setClipToOutline(true);
-        }
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+//            setClipToOutline(true);
+//        }
 
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
@@ -100,9 +101,9 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 将Add进ScrollableIndicatorLayout中
+     * Add child NTabView into ScrollableIndicatorLayout
      *
-     * @param child
+     * @param child child NTabView
      */
     @Override
     public final void addView(View child) {
@@ -113,9 +114,9 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 将Add进ScrollableIndicatorLayout中
+     * Add child NTabView into ScrollableIndicatorLayout
      *
-     * @param child
+     * @param child child NTabView
      */
     @Override
     public final void addView(View child, int index) {
@@ -126,9 +127,9 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 将Add进ScrollableIndicatorLayout中
+     * Add child NTabView into ScrollableIndicatorLayout
      *
-     * @param child
+     * @param child child NTabView
      */
     @Override
     public final void addView(View child, ViewGroup.LayoutParams params) {
@@ -139,9 +140,9 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 将Add进ScrollableIndicatorLayout中
+     * Add child NTabView into ScrollableIndicatorLayout
      *
-     * @param child
+     * @param child child NTabView
      */
     @Override
     public final void addView(View child, int index, ViewGroup.LayoutParams params) {
@@ -167,7 +168,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
 
 
     /**
-     * 添加Tab到数组
+     * add tab to array
      *
      * @param nTabView
      */
@@ -177,7 +178,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 添加TabView到数组
+     * add tab to array
      *
      * @param nTabView
      * @param index
@@ -188,7 +189,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 移除
+     * remove view from array
      *
      * @param nTabView
      */
@@ -197,7 +198,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 移除
+     * remove view from array
      *
      * @param index
      */
@@ -206,9 +207,9 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 选择Tab变更Tab
+     * change tab to index
      *
-     * @param index
+     * @param index which tab will selected.
      */
     public final void setSelectedTab(int index) {
         if (index != mSelectedTabNum) {
@@ -217,10 +218,10 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
     }
 
     /**
-     * 通过View读取ItemIndex值
+     * read index of ntabview by interface TabChild
      *
-     * @param nTabView
-     * @return
+     * @param nTabView ntabview as TabChild
+     * @return which tab selected
      */
     @Override
     public int getItemIndexByView(TabChild nTabView) {
@@ -255,7 +256,7 @@ public class NTabLayout extends HorizontalScrollView implements State, TabLayout
 
 
     /**
-     * 将在ScrollableIndicatorLayout中显示Tab内容以及背景指示器
+     *
      */
     static class ScrollableLayout extends LinearLayout implements State {
         int mSelectedTabNum = 0;

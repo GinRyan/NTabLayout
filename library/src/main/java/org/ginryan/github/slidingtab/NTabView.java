@@ -15,26 +15,28 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
-
+/**
+ * @author GinRyan Xelloss
+ */
 public class NTabView extends FrameLayout implements State, TabChild {
     public static final String TAG = "NTabView";
 
     public static final int DEFAULT_TITLE_SIZE_IN_SP = 18;
 
-    //标题属性
+    //Tab title state
     String nTabTitleState;
     float nTabTitleSize;
     int nTabTitleColor;
     boolean nTabTitleChecked;
 
     View customView;
-    //计算字体大小
+    //compute font size
     float mComputeFontSize;
 
-    //Tab被选中时的放大率
+    //scale up rate
     public final float TAB_TEXT_SCALED_UP_ON_CHECKED = 1.34f;
     //boolean useTitleScaleRate = true;
-    //Tab的状态是Check与否
+    //tab check state.
     int mCheckState = State.STATE_CODE_UNCHECK;
     int mLastCheckState = State.STATE_CODE_UNCHECK;
 
@@ -49,10 +51,10 @@ public class NTabView extends FrameLayout implements State, TabChild {
 
 
     boolean showTitle = true;
-    //自己在父Tab中的位置索引
+    //item index in tab
     int mItemIndexInTab = -1;
 
-    //显示调试辅助线
+    //guide line in debug
     boolean showGuideline = false;
 
     public NTabView(Context context) {
@@ -76,7 +78,7 @@ public class NTabView extends FrameLayout implements State, TabChild {
     }
 
 
-    void initAttrs( AttributeSet attrs) {
+    void initAttrs(AttributeSet attrs) {
         TypedArray op = getContext().obtainStyledAttributes(attrs, R.styleable.NTabView);
 
         nTabTitleState = (String) op.getText(R.styleable.NTabView_nTabTitleText);
@@ -155,11 +157,10 @@ public class NTabView extends FrameLayout implements State, TabChild {
         //Log.d(TAG, "onDraw: " + nTabTitleState);
 
         //1. 居中显示Tab标题
-        //文本宽度
+        //Tab title will show in center
         float textWidth = mTitlePaint.measureText(nTabTitleState);
-        //文本宽度的一半
         float halfTextWidth = textWidth / 2;
-        //左边推进的宽度
+        //The distance that the tab title is pushed to left
         float leftOffset = getMeasuredWidth() / 2 - halfTextWidth;
         float textBaseline = (getMeasuredHeight() / 2 + mComputeFontSize / 2);
 
@@ -188,11 +189,6 @@ public class NTabView extends FrameLayout implements State, TabChild {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        //不困在当前的TabView中
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            setClipToOutline(false);
-        }
-
         updateState(false);
     }
 
@@ -202,16 +198,16 @@ public class NTabView extends FrameLayout implements State, TabChild {
     }
 
     /**
-     * Update 函数，用于更新所有绘制内容的状态
+     * Update function is used to update content states.
      *
-     * @param byCheck
+     * @param byCheck if user action by hand or not.
      */
     public void updateBy(boolean byCheck) {
         if (byCheck) {
             checkItemIndexInTab();
         }
         if (mItemIndexInTab < 0) {
-            //buggy 此时还不知道mItemIndexInTab
+            //buggy When mItemIndexInTab wasn't initialized.
         } else {
             if (mCheckState == STATE_CODE_CHECKED) {
                 Log.i(TAG, "INDEX: " + mItemIndexInTab + "--> ?");
@@ -220,21 +216,19 @@ public class NTabView extends FrameLayout implements State, TabChild {
             }
         }
         if (mCheckState == STATE_CODE_CHECKED) {
-             inBoldFontState = true;
+            inBoldFontState = true;
 
             if (byCheck) {
 
                 NTabLayout parent = (NTabLayout) getParent().getParent();
 
-                //这部分用来求出不可见部分宽度
+                //This part will figure out invisible part of view's width.
                 Rect vRect = new Rect();
                 getGlobalVisibleRect(vRect);
                 int visibleWidth = vRect.width();
                 int measuredWidth = getMeasuredWidth();
                 int invisibleWidth = measuredWidth - visibleWidth;
-
-                //父控件宽度
-
+                //The rect of parent visible part .
                 Rect parentVisibleRect = new Rect();
                 parent.getGlobalVisibleRect(parentVisibleRect);
                 int parentVisibleWidth = parentVisibleRect.width();
@@ -278,27 +272,45 @@ public class NTabView extends FrameLayout implements State, TabChild {
         updatePaints();
     }
 
-    //使用动画
+    /**
+     * if use animation scale attr
+     */
     boolean useAnimScale = true;
-    //单帧时长
+    /**
+     * animation duration per frame.
+     */
     private static final float DURING_PER_FRAME = 16.67f;
-    //补间动画时长(ms)
+    /**
+     * animation during(ms)
+     */
     final float animationDuring = 100;
 
-    //目标缩放率(%)
+    //scale rate lowest limit(%)
     float mFontScaleRateLowestLimit = 1;
-    //起始缩放率(%)
+    //scale rate upper limit(%)
     float mFontScaleRateUpperLimit = 1;
-    //当前缩放率(%)
+    /**
+     * current font scale rate(%)
+     * <p>
+     * it will step from {mFontScaleRateLowestLimit} to {mFontScaleRateUpperLimit}
+     */
     float currentFontScaleRate = 1;
-    //缩放率步长
+    /**
+     * step in rate increment or decrement.
+     */
     float rateDelta = 0;
 
-    //补间动画总帧数(fpc)
+    /**
+     * total tween frame counts
+     */
     int mTotalTweenFpc = 0;
-    //当前帧编号
+    /**
+     * current frame num
+     */
     int mCurrentFpc = 0;
-
+    /**
+     * The sign represents direction which tab is sliding to.
+     */
     int sign = 1;
 
     private void scaleInStateInit() {
