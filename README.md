@@ -8,7 +8,15 @@ NTabLayout is a simple tab bar custom view under android which has click-sliding
 
 This tab bar's effect seems like Xue Qiu's tab bar,  which can load tags on top of ViewPager and there's a  click-sliding effect and scaling up animation.
 
+## Publish
 
+International:
+
+[https://github.com/GinRyan/NTabLayout](https://github.com/GinRyan/NTabLayout)
+
+China mainland:
+
+[https://gitee.com/kumakuri/NTabLayout](https://gitee.com/kumakuri/NTabLayout)
 
 ## SnapShot
 
