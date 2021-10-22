@@ -120,7 +120,11 @@ tablayout.addOnTabListener(itemIndex -> {
 
 ## Third Party Library
 
-No 3rd party dependencies. 
+Sources need no 3rd party dependencies. 
+
+
+
+But aapt need appcompat deps to build resources.
 
 
 ## License
