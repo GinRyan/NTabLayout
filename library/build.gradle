@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 
 android {
@@ -26,4 +27,66 @@ android {
 }
 
 dependencies {
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                group = 'com.github.GinRyan'
+                artifactId = 'NTabLayout'
+                version = '0.3.1'
+
+                // Adds javadocs and sources as separate jars.
+                artifact androidJavadocsJar
+                artifact(sourceJar)
+
+                pom {
+                    name = 'NTabLayout'
+                    description = 'NTabLayout is a simple tab bar custom view under android which has click-sliding and scaling up animation effect.'
+                    url = 'https://github.com/GinRyan/NTabLayout'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'ginryan'
+                            name = 'Gin Ryan'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git@github.com/GinRyan/NTabLayout.git'
+                        developerConnection = 'scm:git@github.com/GinRyan/NTabLayout.git'
+                        url = 'https://github.com/GinRyan/NTabLayout'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
 }

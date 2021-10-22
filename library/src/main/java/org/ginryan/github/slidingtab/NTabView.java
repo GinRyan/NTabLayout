@@ -214,9 +214,9 @@ public class NTabView extends FrameLayout implements State, TabChild {
             //buggy 此时还不知道mItemIndexInTab
         } else {
             if (mCheckState == STATE_CODE_CHECKED) {
-                Log.i(TAG, "INDEX: " + mItemIndexInTab + "--> ✔");
+                Log.i(TAG, "INDEX: " + mItemIndexInTab + "--> ?");
             } else if (mCheckState == STATE_CODE_UNCHECK) {
-                Log.i(TAG, "INDEX: " + mItemIndexInTab + "--> ✖");
+                Log.i(TAG, "INDEX: " + mItemIndexInTab + "--> ?");
             }
         }
         if (mCheckState == STATE_CODE_CHECKED) {
